@@ -1,6 +1,6 @@
 # Guion para el video — StockLite CRUD
 
-**Autor:** Andrés Sebaxtian Vargas Bermeo  
+**Autor:** Andres Sebaxtian Vargas Bermeo  
 **Duración objetivo:** 7 a 9 minutos (máximo 10).
 
 ## Antes de grabar
