@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="StockLite: aplicación web CRUD para gestionar un inventario.">
+  <meta name="theme-color" content="#142820">
+  <title>StockLite | Inventario</title>
+  <style>
+    :root{--green:#21865d;--green-dark:#176b49;--ink:#203329;--muted:#7c8b82;--line:#e7eee9;--bg:#f5f8f5;--white:#fff;--nav:#142820;--orange:#c17c30}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Arial, sans-serif}
+    button,input,select{font:inherit}button{cursor:pointer}.layout{min-height:100vh;display:flex}
+    aside{width:230px;background:var(--nav);color:#dce9e1;padding:28px 18px;display:flex;flex-direction:column}
+    .brand{font-size:23px;font-weight:800;color:#fff;letter-spacing:-1px;margin:0 8px 48px}.brand span{color:#82cba6}
+    .navtitle{font-size:10px;color:#82978a;letter-spacing:1.2px;margin:0 8px 12px}.navitem{background:#244838;color:#fff;padding:12px;border-radius:8px;font-weight:600}
+    .sidefoot{margin-top:auto;color:#9eb4a6;font-size:12px;border-top:1px solid #345043;padding-top:16px}
+    main{flex:1;min-width:0}.top{height:64px;background:#fff;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:0 38px;color:#88978e;font-size:12px}
+    .online{color:var(--green)}.content{max-width:1450px;margin:auto;padding:36px 38px}.heading{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:24px}
+    .eyebrow{font-size:10px;color:var(--green);font-weight:bold;letter-spacing:1.4px}.heading h1{margin:5px 0;font-size:30px;letter-spacing:-1px}.heading h1 span{color:var(--green)}.sub{margin:0;color:#87958c}
+    .btn{border:0;border-radius:7px;padding:11px 16px;font-weight:700}.primary{background:var(--green);color:white}.primary:hover{background:var(--green-dark)}.light{background:#e9f5ee;color:var(--green-dark)}
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:22px}.stat,.panel{background:#fff;border:1px solid var(--line);border-radius:10px}
+    .stat{padding:17px}.statlabel{font-size:12px;color:var(--muted)}.stat strong{display:block;font-size:26px;margin-top:9px}.panel{overflow:hidden}
+    .panelhead{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:20px;border-bottom:1px solid var(--line)}.panelhead h2{font-size:17px;margin:0}.panelhead p{color:var(--muted);font-size:12px;margin:4px 0 0}
+    .tools{display:flex;gap:9px}.tools input,.tools select{padding:9px 11px;border:1px solid var(--line);border-radius:7px;background:#fff;min-width:180px}
+    .tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;white-space:nowrap}th,td{text-align:left;padding:13px 16px;border-bottom:1px solid #eef2ef}
+    th{font-size:10px;letter-spacing:.6px;color:#84938a;background:#f9fbf9}td{font-size:13px}.productname{font-weight:700}.code{font-size:11px;color:#9aa69f}.pill{display:inline-block;padding:4px 9px;border-radius:20px;background:#eaf6ef;color:#268158;font-size:11px;font-weight:700}.low{background:#fff3e5;color:var(--orange)}
+    .actions{display:flex;gap:6px}.action{border:1px solid var(--line);background:white;border-radius:6px;padding:6px 9px;color:#53645a}.action.delete{color:#b34c47}.empty{padding:34px;text-align:center;color:var(--muted)}
+    .footer{padding:15px 3px;color:#9aa69e;font-size:11px;display:flex;justify-content:space-between}
+    .backdrop{position:fixed;inset:0;background:#0c2118a8;display:grid;place-items:center;padding:16px}.backdrop[hidden]{display:none}.modal{width:min(100%,480px);background:white;border-radius:12px;padding:24px;box-shadow:0 20px 60px #0003}
+    .modalhead{display:flex;justify-content:space-between;align-items:start}.modal h2{margin:0 0 4px}.modal p{margin:0 0 18px;color:var(--muted);font-size:12px}.close{border:0;background:transparent;font-size:24px;color:#7c8b82}
+    .formgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.field.full{grid-column:1/-1}.field label{display:block;margin-bottom:5px;font-size:12px;font-weight:700}.field input,.field select{width:100%;padding:10px;border:1px solid #dfe8e1;border-radius:7px}.error{min-height:16px;color:#b34c47;font-size:11px}.modalactions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+    @media(max-width:950px){aside{width:175px}.content{padding:26px 20px}.top{padding:0 20px}.stats{grid-template-columns:repeat(2,1fr)}.panelhead{align-items:flex-start;flex-direction:column}.tools{width:100%}.tools input{flex:1}}
+    @media(max-width:650px){aside{width:58px;padding:18px 8px}.brand{font-size:0;margin:0 0 35px}.brand:before{content:'S';font-size:24px}.navtitle{display:none}.navitem{font-size:0;padding:10px}.navitem:after{content:'▦';font-size:19px}.sidefoot{display:none}.top{height:54px;padding:0 12px}.content{padding:22px 12px}.heading{align-items:flex-start;flex-direction:column}.heading h1{font-size:25px}.tools{flex-direction:column}.tools input,.tools select{width:100%}.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}.footer{gap:8px;flex-direction:column}}
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside>
+    <div class="brand">stock<span>lite</span></div>
+    <div class="navtitle">ESPACIO DE TRABAJO</div>
+    <div class="navitem">Panel general</div>
+    <div class="sidefoot">Proyecto académico CRUD<br>Andrés Vargas · Ingeniería de Software</div>
+  </aside>
+  <main>
+    <header class="top"><span>Espacio de trabajo / Inventario</span><span class="online">● Datos guardados en este navegador</span></header>
+    <div class="content">
+      <section class="heading">
+        <div><div class="eyebrow">GESTIÓN DE PRODUCTOS</div><h1>Tu inventario, <span>bajo control.</span></h1><p class="sub">Administra tus productos de forma sencilla y mantén todo organizado.</p></div>
+        <button class="btn primary" id="add">＋ Agregar producto</button>
+      </section>
+      <section class="stats">
+        <article class="stat"><div class="statlabel">Productos registrados</div><strong id="count">0</strong></article>
+        <article class="stat"><div class="statlabel">Unidades disponibles</div><strong id="units">0</strong></article>
+        <article class="stat"><div class="statlabel">Valor del inventario</div><strong id="value">$0</strong></article>
+        <article class="stat"><div class="statlabel">Stock bajo (5 o menos)</div><strong id="lowcount">0</strong></article>
+      </section>
+      <section class="panel">
+        <div class="panelhead"><div><h2>Lista de productos</h2><p>Consulta, crea, edita o elimina registros de tu inventario.</p></div>
+          <div class="tools"><input id="search" type="search" placeholder="Buscar por nombre o código"><select id="filter"><option value="all">Todas las categorías</option><option>Tecnología</option><option>Oficina</option><option>Accesorios</option><option>Otros</option></select></div>
+        </div>
+        <div class="tablewrap"><table><thead><tr><th>PRODUCTO</th><th>CATEGORÍA</th><th>PRECIO</th><th>EXISTENCIAS</th><th>ESTADO</th><th>ACCIONES</th></tr></thead><tbody id="rows"></tbody></table><div class="empty" id="empty" hidden>No hay productos para mostrar.</div></div>
+        <div class="panelhead"><small id="results">Mostrando 0 productos</small><small>LocalStorage activo</small></div>
+      </section>
+      <footer class="footer"><span>StockLite · Proyecto académico CRUD</span><span>HTML5 · CSS3 · JavaScript</span></footer>
+    </div>
+  </main>
+</div>
+<div class="backdrop" id="backdrop" hidden>
+  <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modalhead"><div><h2 id="modalTitle">Agregar producto</h2><p>Completa los datos para registrar un producto.</p></div><button class="close" id="close" aria-label="Cerrar">×</button></div>
+    <form id="form" novalidate>
+      <input type="hidden" id="id">
+      <div class="formgrid">
+        <div class="field full"><label for="name">Nombre del producto</label><input id="name" maxlength="60" placeholder="Ej. Teclado inalámbrico"><div class="error" id="nameError"></div></div>
+        <div class="field"><label for="category">Categoría</label><select id="category"><option value="">Seleccionar</option><option>Tecnología</option><option>Oficina</option><option>Accesorios</option><option>Otros</option></select><div class="error" id="categoryError"></div></div>
+        <div class="field"><label for="quantity">Cantidad</label><input id="quantity" type="number" min="0" step="1" placeholder="Ej. 12"><div class="error" id="quantityError"></div></div>
+        <div class="field full"><label for="price">Precio unitario (COP)</label><input id="price" type="number" min="0" step="100" placeholder="Ej. 85000"><div class="error" id="priceError"></div></div>
+      </div>
+      <div class="modalactions"><button type="button" class="btn light" id="cancel">Cancelar</button><button type="submit" class="btn primary" id="save">Guardar producto</button></div>
+    </form>
+  </section>
+</div>
+<script>
+'use strict';
+const KEY='stocklite-products-v1';
+const categories=['Tecnología','Oficina','Accesorios','Otros'];
+const money=n=>new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(n);
+const $=id=>document.getElementById(id);
+let products=loadProducts();
+function starters(){return [
+ {id:'STK-1001',name:'Teclado inalámbrico',category:'Tecnología',quantity:18,price:89000},
+ {id:'STK-1002',name:'Cuaderno profesional',category:'Oficina',quantity:4,price:12500},
+ {id:'STK-1003',name:'Mouse ergonómico',category:'Accesorios',quantity:12,price:56000}
+];}
+function loadProducts(){try{const raw=localStorage.getItem(KEY);if(raw===null){localStorage.setItem(KEY,JSON.stringify(starters()));return starters();}const data=JSON.parse(raw);return Array.isArray(data)?data.filter(p=>p&&typeof p.id==='string'&&typeof p.name==='string'&&categories.includes(p.category)&&Number.isInteger(p.quantity)&&p.quantity>=0&&Number.isFinite(p.price)&&p.price>=0):starters();}catch(error){console.error('Error al leer LocalStorage',error);return starters();}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(products));return true;}catch(error){alert('No fue posible guardar los datos en este navegador.');return false;}}
+function render(){
+ const q=$('search').value.trim().toLocaleLowerCase('es');const cat=$('filter').value;
+ const shown=products.filter(p=>(p.name.toLocaleLowerCase('es').includes(q)||p.id.toLowerCase().includes(q))&&(cat==='all'||p.category===cat));
+ $('rows').replaceChildren();
+ shown.forEach(p=>{
+   const tr=document.createElement('tr');
+   const values=[p.name,p.category,money(p.price),String(p.quantity)];
+   values.forEach((value,i)=>{const td=document.createElement('td');td.textContent=value;if(i===0){td.innerHTML='';const strong=document.createElement('strong');strong.className='productname';strong.textContent=p.name;const code=document.createElement('div');code.className='code';code.textContent=p.id;td.append(strong,code);}tr.append(td);});
+   const status=document.createElement('td');const badge=document.createElement('span');badge.className='pill'+(p.quantity<=5?' low':'');badge.textContent=p.quantity<=5?'Stock bajo':'Disponible';status.append(badge);tr.append(status);
+   const actions=document.createElement('td');actions.className='actions';
+   const edit=document.createElement('button');edit.className='action';edit.type='button';edit.textContent='Editar';edit.addEventListener('click',()=>openEdit(p.id));
+   const del=document.createElement('button');del.className='action delete';del.type='button';del.textContent='Eliminar';del.addEventListener('click',()=>removeProduct(p.id));
+   actions.append(edit,del);tr.append(actions);$('rows').append(tr);
+ });
+ $('empty').hidden=shown.length>0;$('count').textContent=products.length;$('units').textContent=products.reduce((s,p)=>s+p.quantity,0).toLocaleString('es-CO');
+ $('value').textContent=money(products.reduce((s,p)=>s+p.quantity*p.price,0));$('lowcount').textContent=products.filter(p=>p.quantity<=5).length;
+ $('results').textContent='Mostrando '+shown.length+' de '+products.length+' productos';
+}
+function openModal(p){$('form').reset();clearErrors();$('id').value=p?p.id:'';$('name').value=p?p.name:'';$('category').value=p?p.category:'';$('quantity').value=p?p.quantity:'';$('price').value=p?p.price:'';
+ $('modalTitle').textContent=p?'Editar producto':'Agregar producto';$('save').textContent=p?'Guardar cambios':'Guardar producto';$('backdrop').hidden=false;$('name').focus();}
+function openEdit(id){const p=products.find(x=>x.id===id);if(p)openModal(p);}
+function closeModal(){$('backdrop').hidden=true;$('form').reset();clearErrors();}
+function clearErrors(){['name','category','quantity','price'].forEach(k=>$(k+'Error').textContent='');}
+function validate(){
+ clearErrors();let valid=true;const name=$('name').value.trim(),category=$('category').value,qText=$('quantity').value,pText=$('price').value;
+ const q=Number(qText),price=Number(pText);
+ if(name.length<2){$('nameError').textContent='Escribe al menos 2 caracteres.';valid=false;}
+ if(!categories.includes(category)){$('categoryError').textContent='Selecciona una categoría.';valid=false;}
+ if(qText===''||!Number.isInteger(q)||q<0||q>1000000){$('quantityError').textContent='Usa un entero entre 0 y 1.000.000.';valid=false;}
+ if(pText===''||!Number.isFinite(price)||price<0||price>1000000000){$('priceError').textContent='Ingresa un precio válido.';valid=false;}
+ return valid?{name,category,quantity:q,price}:null;
+}
+function nextId(){const max=products.reduce((m,p)=>{const n=Number((p.id.match(/^STK-(\d+)$/)||[])[1]||0);return Math.max(m,n);},1000);return 'STK-'+(max+1);}
+$('form').addEventListener('submit',e=>{
+ e.preventDefault();const data=validate();if(!data)return;const id=$('id').value;const previous=products;
+ products=id?products.map(p=>p.id===id?{...p,...data}:p):[...products,{id:nextId(),...data}];
+ if(!persist()){products=previous;return;}closeModal();render();alert(id?'Producto actualizado correctamente.':'Producto agregado correctamente.');
+});
+function removeProduct(id){const p=products.find(x=>x.id===id);if(!p||!confirm('¿Eliminar '+p.name+'? Esta acción no se puede deshacer.'))return;const previous=products;products=products.filter(x=>x.id!==id);if(!persist()){products=previous;return;}render();}
+$('add').addEventListener('click',()=>openModal(null));$('close').addEventListener('click',closeModal);$('cancel').addEventListener('click',closeModal);
+$('backdrop').addEventListener('click',e=>{if(e.target===$('backdrop'))closeModal();});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('backdrop').hidden)closeModal();});
+$('search').addEventListener('input',render);$('filter').addEventListener('change',render);
+render();
+</script>
+</body>
+</html>
