@@ -1,6 +1,6 @@
 # StockLite — Aplicación web CRUD de inventario
 
-**Autor:** Andrés Sebaxtian Vargas Bermeo  
+**Autor:** Andres Sebaxtian Vargas Bermeo  
 **Programa:** Ingeniería de Software  
 **Seminario:** Gestión de Software Ágil asistido por Inteligencia Artificial
 
